@@ -1,17 +1,29 @@
-namespace BattleCity;
+namespace BattleCity
 
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
-using BattleCity.Model;
+open Avalonia
+open Avalonia.Controls.ApplicationLifetimes
+open Avalonia.Data.Core
+open Avalonia.Data.Core.Plugins
+open Avalonia.Markup.Xaml
+open BattleCity.Model
 
-public class App : Application {
+type App() =
+    inherit Application()
 
-    public override void Initialize() {
-        AvaloniaXamlLoader.Load(this);
-    }
+    override this.Initialize() =
+            AvaloniaXamlLoader.Load(this)
 
-    public override void OnFrameworkInitializationCompleted() {
+    override this.OnFrameworkInitializationCompleted() =
+
+        // Line below is needed to remove Avalonia data validation.
+        // Without this line you will get duplicate validations from both Avalonia and CT
+        BindingPlugins.DataValidators.RemoveAt(0)
+
+        match this.ApplicationLifetime with
+        | :? IClassicDesktopStyleApplicationLifetime as desktop ->
+             desktop.MainWindow <- MainWindow(DataContext = MainWindowViewModel())
+        | _ -> ()
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
             var mainWindow = new MainWindow();
 
@@ -21,6 +33,5 @@ public class App : Application {
             mainWindow.DataContext = field;
 
             lifetime.MainWindow = mainWindow;
-        }
-    }
-}
+
+        base.OnFrameworkInitializationCompleted()
