@@ -1,8 +1,4 @@
 ﻿namespace BattleCity.Model;
 
-public class Player : MovingGameObject
-{
-    public Player(GameField field, CellLocation location, Facing facing) : base(field, location, facing)
-    {
-    }
+public class Player(GameField field, CellLocation location, Facing facing) : MovingGameObject(field, location, facing) {
 }

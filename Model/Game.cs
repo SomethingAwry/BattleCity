@@ -1,24 +1,16 @@
-using System;
-using System.Linq;
-using Avalonia.Input;
-
 namespace BattleCity.Model;
 
-public class Game : GameBase
-{
-    private readonly GameField _field;
+using Avalonia.Input;
+using System;
+using System.Linq;
 
-    public Game(GameField field)
-    {
-        _field = field;
-    }
+public class Game(GameField field) : GameBase {
+    private readonly GameField _field = field;
 
     private Random Random { get; } = new();
 
-    protected override void Tick()
-    {
-        if (!_field.Player.IsMoving)
-        {
+    protected override void Tick() {
+        if (!_field.Player.IsMoving) {
             if (Keyboard.IsKeyDown(Key.Up))
                 _field.Player.SetTarget(Facing.North);
             else if (Keyboard.IsKeyDown(Key.Down))

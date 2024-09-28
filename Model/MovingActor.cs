@@ -1,17 +1,15 @@
+namespace BattleCity.Model;
+
 using System;
 using System.Linq;
 
-namespace BattleCity.Model;
-
-public abstract class MovingGameObject : GameObject
-{
+public abstract class MovingGameObject : GameObject {
     private readonly GameField _field;
     private CellLocation _cellLocation;
     private Facing _facing;
     private CellLocation _targetCellLocation;
 
-    protected MovingGameObject(GameField field, CellLocation location, Facing facing) : base(location.ToPoint())
-    {
+    protected MovingGameObject(GameField field, CellLocation location, Facing facing) : base(location.ToPoint()) {
         _field = field;
         Facing = facing;
         CellLocation = TargetCellLocation = location;
@@ -19,22 +17,18 @@ public abstract class MovingGameObject : GameObject
 
     public override int Layer => 1;
 
-    public Facing Facing
-    {
+    public Facing Facing {
         get => _facing;
-        set
-        {
+        set {
             if (value == _facing) return;
             _facing = value;
             OnPropertyChanged();
         }
     }
 
-    public CellLocation CellLocation
-    {
+    public CellLocation CellLocation {
         get => _cellLocation;
-        private set
-        {
+        private set {
             if (value.Equals(_cellLocation)) return;
             _cellLocation = value;
             OnPropertyChanged();
@@ -42,11 +36,9 @@ public abstract class MovingGameObject : GameObject
         }
     }
 
-    public CellLocation TargetCellLocation
-    {
+    public CellLocation TargetCellLocation {
         get => _targetCellLocation;
-        private set
-        {
+        private set {
             if (value.Equals(_targetCellLocation)) return;
             _targetCellLocation = value;
             OnPropertyChanged();
@@ -58,8 +50,7 @@ public abstract class MovingGameObject : GameObject
 
     protected virtual double SpeedFactor => (double)1 / 15;
 
-    public bool SetTarget(CellLocation loc)
-    {
+    public bool SetTarget(CellLocation loc) {
         if (IsMoving)
             //We are the bear rolling from the hill
             throw new InvalidOperationException("Unable to change direction while moving");
@@ -82,10 +73,9 @@ public abstract class MovingGameObject : GameObject
         return true;
     }
 
-    public CellLocation GetTileAtDirection(Facing facing)
-    {
+    public CellLocation GetTileAtDirection(Facing facing) {
         if (facing == Facing.North)
-            return CellLocation with { Y =  CellLocation.Y - 1 };
+            return CellLocation with { Y = CellLocation.Y - 1 };
         if (facing == Facing.South)
             return CellLocation with { Y = CellLocation.Y + 1 };
         if (facing == Facing.West)
@@ -93,13 +83,11 @@ public abstract class MovingGameObject : GameObject
         return CellLocation with { X = CellLocation.X + 1 };
     }
 
-    public bool SetTarget(Facing? facing)
-    {
+    public bool SetTarget(Facing? facing) {
         return SetTarget(facing.HasValue ? GetTileAtDirection(facing.Value) : CellLocation);
     }
 
-    private Facing GetDirection(CellLocation current, CellLocation target)
-    {
+    private Facing GetDirection(CellLocation current, CellLocation target) {
         if (target.X < current.X)
             return Facing.West;
         if (target.X > current.X)
@@ -109,14 +97,12 @@ public abstract class MovingGameObject : GameObject
         return Facing.South;
     }
 
-    public void SetLocation(CellLocation loc)
-    {
+    public void SetLocation(CellLocation loc) {
         CellLocation = loc;
         Location = loc.ToPoint();
     }
 
-    public void MoveToTarget()
-    {
+    public void MoveToTarget() {
         if (TargetCellLocation == CellLocation)
             return;
         var speed = GameField.CellSize *
@@ -125,29 +111,22 @@ public abstract class MovingGameObject : GameObject
                     * SpeedFactor;
         var pos = Location;
         var direction = GetDirection(CellLocation, TargetCellLocation);
-        if (direction == Facing.North)
-        {
+        if (direction == Facing.North) {
             pos = pos.WithY(pos.Y - speed);
             Location = pos;
             if (pos.Y / GameField.CellSize <= TargetCellLocation.Y)
                 SetLocation(TargetCellLocation);
-        }
-        else if (direction == Facing.South)
-        {
+        } else if (direction == Facing.South) {
             pos = pos.WithY(pos.Y + speed);
             Location = pos;
             if (pos.Y / GameField.CellSize >= TargetCellLocation.Y)
                 SetLocation(TargetCellLocation);
-        }
-        else if (direction == Facing.West)
-        {
+        } else if (direction == Facing.West) {
             pos = pos.WithX(pos.X - speed);
             Location = pos;
             if (pos.X / GameField.CellSize <= TargetCellLocation.X)
                 SetLocation(TargetCellLocation);
-        }
-        else if (direction == Facing.East)
-        {
+        } else if (direction == Facing.East) {
             pos = pos.WithX(pos.X + speed);
             Location = pos;
             if (pos.X / GameField.CellSize >= TargetCellLocation.X)

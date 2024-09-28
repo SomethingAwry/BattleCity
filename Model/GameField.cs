@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿namespace BattleCity.Model;
+
 using Avalonia;
 using BattleCity.Infrastructure;
+using System;
+using System.Collections.ObjectModel;
 
-namespace BattleCity.Model;
-
-public class GameField : PropertyChangedBase
-{
+public class GameField : PropertyChangedBase {
     public const double CellSize = 32;
 
-    public GameField() : this(20, 15)
-    {
+    public GameField() : this(20, 15) {
     }
 
-    public GameField(int width, int height)
-    {
+    public GameField(int width, int height) {
         Width = width;
         Height = height;
         Tiles = new TerrainTile[width, height];
         for (var x = 0; x < width; x++)
-        for (var y = 0; y < height; y++)
-            GameObjects.Add(
-                Tiles[x, y] =
-                    new TerrainTile(new Point(x * CellSize, y * CellSize), GetTypeForCoords(x, y)));
+            for (var y = 0; y < height; y++)
+                GameObjects.Add(
+                    Tiles[x, y] =
+                        new TerrainTile(new Point(x * CellSize, y * CellSize), GetTypeForCoords(x, y)));
         GameObjects.Add(
             Player = new Player(this, new CellLocation(width / 2, height / 2), Facing.East));
 
-        for (var c = 0; c < 10;)
-        {
+        for (var c = 0; c < 10;) {
             var x = Random.Next(Width - 1);
             var y = Random.Next(Height - 1);
             if (!Tiles[x, y].IsPassable)
@@ -40,7 +36,7 @@ public class GameField : PropertyChangedBase
 
     public static GameField DesignInstance { get; } = new();
 
-    public ObservableCollection<GameObject> GameObjects { get; } = new();
+    public ObservableCollection<GameObject> GameObjects { get; } = [];
 
     public TerrainTile[,] Tiles { get; }
 
@@ -50,15 +46,13 @@ public class GameField : PropertyChangedBase
 
     private Random Random { get; } = new();
 
-    private TerrainTileType GetTypeForCoords(int x, int y)
-    {
+    private TerrainTileType GetTypeForCoords(int x, int y) {
         if (x / 2 == Width / 4)
             return TerrainTileType.Pavement;
         if (y / 2 == Height / 4) return TerrainTileType.Water;
 
         if (x * y == 0) return TerrainTileType.StoneWall;
         if ((x + 1 - Width) * (y + 1 - Height) == 0) return TerrainTileType.WoodWall;
-
 
         //if(Random.NextDouble()<0.1) return TerrainTileType.WoodWall;
         if (Random.NextDouble() < 0.3) return TerrainTileType.Forest;

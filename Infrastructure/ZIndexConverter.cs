@@ -1,16 +1,14 @@
-using System;
-using System.Globalization;
-using BattleCity.Model;
-using Avalonia.Data.Converters;
-
 namespace BattleCity.Infrastructure;
 
-internal class ZIndexConverter : IValueConverter
-{
+using Avalonia.Data.Converters;
+using BattleCity.Model;
+using System;
+using System.Globalization;
+
+internal class ZIndexConverter : IValueConverter {
     public static ZIndexConverter Instance { get; } = new();
 
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
         if (value is Player)
             return 2;
         if (value is Tank)
@@ -18,8 +16,7 @@ internal class ZIndexConverter : IValueConverter
         return 0;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
         throw new NotImplementedException();
     }
 }

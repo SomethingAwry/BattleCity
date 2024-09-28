@@ -1,18 +1,16 @@
-﻿using System;
-using System.Globalization;
-using BattleCity.Model;
+﻿namespace BattleCity.Infrastructure;
+
 using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using BattleCity.Model;
+using System;
+using System.Globalization;
 
-namespace BattleCity.Infrastructure;
-
-internal class DirectionToMatrixConverter : IValueConverter
-{
+internal class DirectionToMatrixConverter : IValueConverter {
     public static DirectionToMatrixConverter Instance { get; } = new();
 
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
         var direction = (Facing)value;
         var matrix = Matrix.Identity;
         if (direction == Facing.South) matrix = Matrix.CreateScale(1, -1);
@@ -21,8 +19,7 @@ internal class DirectionToMatrixConverter : IValueConverter
         return new MatrixTransform(matrix);
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
         throw new NotImplementedException();
     }
 }

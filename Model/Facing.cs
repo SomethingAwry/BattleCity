@@ -1,7 +1,6 @@
 ﻿namespace BattleCity.Model;
 
-public enum Facing
-{
+public enum Facing {
     North,
     East,
     South,

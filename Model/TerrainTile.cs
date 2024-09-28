@@ -1,10 +1,9 @@
-using System.Collections.Generic;
-using Avalonia;
-
 namespace BattleCity.Model;
 
-public enum TerrainTileType
-{
+using Avalonia;
+using System.Collections.Generic;
+
+public enum TerrainTileType {
     Plain, //passable, shoot-thru
     WoodWall, //impassable, takes 1 shot to bring down
     StoneWall, //impassable, indestructible
@@ -13,8 +12,8 @@ public enum TerrainTileType
     Forest //passable at half speed, shoot-thru
 }
 
-public class TerrainTile : GameObject
-{
+public class TerrainTile(Point location, TerrainTileType type) : GameObject(location) {
+
     private static readonly Dictionary<TerrainTileType, double> Speeds = new()
     {
         { TerrainTileType.Plain, 1 },
@@ -35,14 +34,8 @@ public class TerrainTile : GameObject
         { TerrainTileType.Forest, true }
     };
 
-    public TerrainTile(Point location, TerrainTileType type) : base(location)
-    {
-        Type = type;
-    }
-
-
     public double Speed => Speeds[Type];
     public bool ShootThru => ShootThrus[Type];
     public bool IsPassable => Speed > 0.1;
-    public TerrainTileType Type { get; set; }
+    public TerrainTileType Type { get; set; } = type;
 }
