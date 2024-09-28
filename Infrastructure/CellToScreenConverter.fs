@@ -1,18 +1,14 @@
-﻿namespace BattleCity.Infrastructure;
+﻿namespace BattleCity.Infrastructure
 
-using Avalonia.Data.Converters;
-using BattleCity.Model;
-using System;
-using System.Globalization;
+open Avalonia.Data.Converters
+open BattleCity.Model
+open System
 
-public class CellToScreenConverter : IValueConverter {
-    public static CellToScreenConverter Instance { get; } = new();
-
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-        return System.Convert.ToDouble(value) * GameField.CellSize;
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-        throw new NotSupportedException();
-    }
-}
+type CellToScreenConverter internal () =
+    static member Instance = CellToScreenConverter()
+    
+    interface IValueConverter with
+        member _.Convert (value, _, _, _) : obj =
+            (Convert.ToDouble(value) * CellLocation.CellSize) :> obj
+        member _.ConvertBack (_, _, _, _) : obj =
+            raise <| NotSupportedException()

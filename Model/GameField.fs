@@ -1,61 +1,52 @@
-﻿namespace BattleCity.Model;
+namespace BattleCity.Model
 
-using Avalonia;
-using BattleCity.Infrastructure;
-using System;
-using System.Collections.ObjectModel;
+open Avalonia
+open System
+open System.Collections.ObjectModel
 
-public class GameField : PropertyChangedBase {
-    public const double CellSize = 32;
+type GameField (width: int, height: int) as this =
+    let random = Random()
 
-    public GameField() : this(20, 15) {
-    }
+    let getTypeForCoords (x: int, y: int) =
+        if x / 2 = width / 4 then TerrainTileType.Pavement
+        elif y / 2 = height / 4 then TerrainTileType.Water
+        elif x * y = 0 then TerrainTileType.StoneWall
+        elif (x + 1 - width) * (y + 1 - height) = 0 then TerrainTileType.WoodWall
+        //elif random.NextDouble() < 0.1 then TerrainTileType.WoodWall
+        elif random.NextDouble() < 0.3 then TerrainTileType.Forest
+        else TerrainTileType.Plain
 
-    public GameField(int width, int height) {
-        Width = width;
-        Height = height;
-        Tiles = new TerrainTile[width, height];
-        for (var x = 0; x < width; x++)
-            for (var y = 0; y < height; y++)
-                GameObjects.Add(
-                    Tiles[x, y] =
-                        new TerrainTile(new Point(x * CellSize, y * CellSize), GetTypeForCoords(x, y)));
-        GameObjects.Add(
-            Player = new Player(this, new CellLocation(width / 2, height / 2), Facing.East));
+    let tiles = Array2D.init width height (fun x y -> 
+        TerrainTile(Point(float x * CellLocation.CellSize, float y * CellLocation.CellSize), getTypeForCoords(x, y))
+    )
 
-        for (var c = 0; c < 10;) {
-            var x = Random.Next(Width - 1);
-            var y = Random.Next(Height - 1);
-            if (!Tiles[x, y].IsPassable)
-                continue;
-            c++;
-            GameObjects.Add(new Tank(this, new CellLocation(x, y), (Facing)Random.Next(4),
-                Random.NextDouble() * 4 + 1));
-        }
-    }
+    let player = Player(this, { X = width / 2; Y = height / 2 }, Facing.East)
 
-    public static GameField DesignInstance { get; } = new();
+    let gameObjects = ObservableCollection<GameObject>()
 
-    public ObservableCollection<GameObject> GameObjects { get; } = [];
+    do
+        tiles |> Array2D.iter gameObjects.Add
+        player |> gameObjects.Add
 
-    public TerrainTile[,] Tiles { get; }
+        Seq.initInfinite (fun _ -> random.Next (width - 1), random.Next (height - 1))
+        |> Seq.filter (fun (x,y) -> tiles[x, y].IsPassable)
+        |> Seq.truncate 10
+        |> Seq.iter (fun (x,y) ->
+            let tankFacing = Enum.GetValues<Facing>()[random.Next(4)]
+            Tank(this, { X = x; Y = y }, tankFacing, random.NextDouble() * 4.0 + 1.0)
+            |> gameObjects.Add
+        )
 
-    public Player Player { get; }
-    public int Height { get; }
-    public int Width { get; }
+    member _.Width = width
+    member _.Height = height
+    member _.GameObjects = gameObjects
 
-    private Random Random { get; } = new();
+    static member private designOnly = lazy GameField(20, 15)
+    static member DesignInstance = GameField.designOnly.Value
 
-    private TerrainTileType GetTypeForCoords(int x, int y) {
-        if (x / 2 == Width / 4)
-            return TerrainTileType.Pavement;
-        if (y / 2 == Height / 4) return TerrainTileType.Water;
-
-        if (x * y == 0) return TerrainTileType.StoneWall;
-        if ((x + 1 - Width) * (y + 1 - Height) == 0) return TerrainTileType.WoodWall;
-
-        //if(Random.NextDouble()<0.1) return TerrainTileType.WoodWall;
-        if (Random.NextDouble() < 0.3) return TerrainTileType.Forest;
-        return TerrainTileType.Plain;
-    }
-}
+    interface IGameField with
+        member me.Width = me.Width
+        member me.Height = me.Height
+        member _.Tiles = tiles
+        member me.GameObjects = me.GameObjects
+        member _.Player = player

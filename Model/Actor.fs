@@ -1,23 +1,19 @@
-﻿namespace BattleCity.Model;
+﻿namespace BattleCity.Model
 
-using Avalonia;
-using BattleCity.Infrastructure;
+open Avalonia
+open BattleCity.Infrastructure
 
-public abstract class GameObject : PropertyChangedBase {
-    private Point _location;
+[<AbstractClass>]
+type GameObject internal (location: Point) =
+    inherit PropertyChangedBase()
+    let mutable _location = location
 
-    protected GameObject(Point location) {
-        Location = location;
-    }
+    member my.Location
+        with get() = _location
+        and internal set (v) =
+            if not (v.Equals(_location)) then
+                _location <- v
+                my.OnPropertyChanged <@ my.Location @>
 
-    public Point Location {
-        get => _location;
-        protected set {
-            if (value.Equals(_location)) return;
-            _location = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public virtual int Layer => 0;
-}
+    abstract Layer: int with get
+    default _.Layer = 0

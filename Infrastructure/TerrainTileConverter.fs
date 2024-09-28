@@ -1,29 +1,22 @@
-﻿namespace BattleCity.Infrastructure;
+﻿namespace BattleCity.Infrastructure
 
-using Avalonia.Data.Converters;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
-using BattleCity.Model;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+open Avalonia.Data.Converters
+open BattleCity.Model
+open System
+open Avalonia.Media.Imaging
+open Avalonia.Platform
 
-public class TerrainTileConverter : IValueConverter {
-    private static Dictionary<TerrainTileType, Bitmap> _cache;
-    public static TerrainTileConverter Instance { get; } = new();
+type TerrainTileConverter internal () =
+    static let cache =
+        Enum.GetValues<TerrainTileType>()
+        |> Seq.map (fun t -> t, new Bitmap(AssetLoader.Open(Uri($"avares://BattleCity/Assets/{t}.png"))))
+        |> Map.ofSeq
+        
+    static member Instance = TerrainTileConverter()
 
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-        return GetCache()[(TerrainTileType)value];
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-        throw new NotImplementedException();
-    }
-
-    private Dictionary<TerrainTileType, Bitmap> GetCache() {
-        return _cache ??= Enum.GetValues(typeof(TerrainTileType)).OfType<TerrainTileType>().ToDictionary(
-            t => t,
-            t => new Bitmap(AssetLoader.Open(new Uri($"avares://BattleCity/Assets/{t}.png"))));
-    }
-}
+    interface IValueConverter with
+        member _.Convert (value, _, _, _) : obj =
+            let tt = value :?> TerrainTileType
+            cache[tt]
+        member _.ConvertBack (_, _, _, _) : obj =
+            raise <| NotImplementedException()

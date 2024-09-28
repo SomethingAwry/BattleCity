@@ -1,30 +1,22 @@
-namespace BattleCity.Model;
+namespace BattleCity.Model
 
-using Avalonia.Threading;
-using System;
+open Avalonia.Threading
+open System
 
-public abstract class GameBase {
-    public const int TicksPerSecond = 60;
-    private readonly DispatcherTimer _timer = new() { Interval = new TimeSpan(0, 0, 0, 0, 1000 / TicksPerSecond) };
+[<AbstractClass>]
+type GameBase internal() as this =
+    [<Literal>]
+    let TicksPerSecond = 60
+    let mutable currentTick = 0L
+    let timer = DispatcherTimer(Interval = TimeSpan(0, 0, 0, 0, 1000 / TicksPerSecond))
+    do timer.Tick |> Event.add (fun _ -> this.DoTick())
 
-    protected GameBase() {
-        _timer.Tick += delegate { DoTick(); };
-    }
+    abstract Tick: unit -> unit
+    member _.CurrentTick with get() = currentTick
 
-    public long CurrentTick { get; private set; }
+    member private my.DoTick() =
+        my.Tick()
+        currentTick <- currentTick + 1L
 
-    private void DoTick() {
-        Tick();
-        CurrentTick++;
-    }
-
-    protected abstract void Tick();
-
-    public void Start() {
-        _timer.IsEnabled = true;
-    }
-
-    public void Stop() {
-        _timer.IsEnabled = false;
-    }
-}
+    member _.Start() = timer.IsEnabled <- true
+    member _.Stop() = timer.IsEnabled <- false

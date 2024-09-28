@@ -1,12 +1,10 @@
-﻿namespace BattleCity;
+﻿namespace BattleCity
 
-using Avalonia.Input;
-using System.Collections.Generic;
+open Avalonia.Input
+open System.Collections.Generic
 
-internal static class Keyboard {
-    public static readonly HashSet<Key> Keys = [];
+module internal Keyboard =
+    let Keys = HashSet<Key>()
 
-    public static bool IsKeyDown(Key key) {
-        return Keys.Contains(key);
-    }
-}
+    let IsKeyDown (key: Key) =
+        Keys.Contains key

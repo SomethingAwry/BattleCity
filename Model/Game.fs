@@ -1,33 +1,34 @@
-namespace BattleCity.Model;
+namespace BattleCity.Model
 
-using Avalonia.Input;
-using System;
-using System.Linq;
+open Avalonia.Input
+open BattleCity
+open System
+open System.Linq
 
-public class Game(GameField field) : GameBase {
-    private readonly GameField _field = field;
+type Game (field: IGameField) =
+    inherit GameBase()
+    
+    let random = Random()
 
-    private Random Random { get; } = new();
+    override _.Tick() =
+        if not field.Player.IsMoving then
+            if Keyboard.IsKeyDown(Key.Up) then
+                field.Player.SetTarget(Facing.North) |> ignore
+            elif Keyboard.IsKeyDown(Key.Down) then
+                field.Player.SetTarget(Facing.South) |> ignore
+            elif Keyboard.IsKeyDown(Key.Left) then
+                field.Player.SetTarget(Facing.West) |> ignore
+            elif Keyboard.IsKeyDown(Key.Right) then
+                field.Player.SetTarget(Facing.East) |> ignore
 
-    protected override void Tick() {
-        if (!_field.Player.IsMoving) {
-            if (Keyboard.IsKeyDown(Key.Up))
-                _field.Player.SetTarget(Facing.North);
-            else if (Keyboard.IsKeyDown(Key.Down))
-                _field.Player.SetTarget(Facing.South);
-            else if (Keyboard.IsKeyDown(Key.Left))
-                _field.Player.SetTarget(Facing.West);
-            else if (Keyboard.IsKeyDown(Key.Right))
-                _field.Player.SetTarget(Facing.East);
-        }
+        field.GameObjects.OfType<Tank>()
+        |> Seq.iter (fun (tank: Tank) -> 
+            if not tank.IsMoving then
+                if not <| tank.SetTarget tank.Facing then
+                    let tankFacing = Enum.GetValues<Facing>()[random.Next(4)]
+                    if not <| tank.SetTarget tankFacing then
+                        tank.SetTarget () |> ignore
+        )
 
-        foreach (var tank in _field.GameObjects.OfType<Tank>())
-            if (!tank.IsMoving)
-                if (!tank.SetTarget(tank.Facing))
-                    if (!tank.SetTarget((Facing)Random.Next(4)))
-                        tank.SetTarget(null);
-
-        foreach (var obj in _field.GameObjects.OfType<MovingGameObject>())
-            obj.MoveToTarget();
-    }
-}
+        field.GameObjects.OfType<MovingGameObject>()
+        |> Seq.iter (fun (mover: MovingGameObject) -> mover.MoveToTarget())

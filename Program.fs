@@ -1,24 +1,22 @@
-﻿namespace BattleCity;
+﻿namespace BattleCity
 
-using Avalonia;
-using System;
+open System
+open Avalonia
 
-internal class Program {
+module Program =
+
+    // Avalonia configuration, don't remove; also used by visual designer.
+    [<CompiledName "BuildAvaloniaApp">] 
+    let buildAvaloniaApp () = 
+        AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+            .WithInterFont()
+            .LogToTrace(areas = [||])
 
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
-    [STAThread]
-    public static void Main(string[] args) {
-        BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
-    }
-
-    // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp() {
-        return AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .WithInterFont()
-            .LogToTrace();
-    }
-}
+    [<EntryPoint; STAThread>]
+    let main args =
+        buildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(args)

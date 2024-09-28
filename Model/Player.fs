@@ -1,4 +1,4 @@
-﻿namespace BattleCity.Model;
+﻿namespace BattleCity.Model
 
-public class Player(GameField field, CellLocation location, Facing facing) : MovingGameObject(field, location, facing) {
-}
+type Player(field: IGameField, location: CellLocation, facing: Facing) =
+    inherit MovingGameObject(field, location, facing)

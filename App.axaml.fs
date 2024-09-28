@@ -1,26 +1,29 @@
-namespace BattleCity;
+namespace BattleCity
 
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
-using BattleCity.Model;
+open Avalonia
+open Avalonia.Controls.ApplicationLifetimes
+open Avalonia.Data.Core.Plugins
+open Avalonia.Markup.Xaml
+open BattleCity.Model
 
-public class App : Application {
+type App() =
+    inherit Application()
 
-    public override void Initialize() {
-        AvaloniaXamlLoader.Load(this);
-    }
+    override this.Initialize() =
+        AvaloniaXamlLoader.Load(this)
 
-    public override void OnFrameworkInitializationCompleted() {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
-            var mainWindow = new MainWindow();
+    override this.OnFrameworkInitializationCompleted() =
 
-            var field = new GameField();
-            var game = new Game(field);
-            game.Start();
-            mainWindow.DataContext = field;
+        // Line below is needed to remove Avalonia data validation.
+        // Without this line you will get duplicate validations from both Avalonia and CT
+        BindingPlugins.DataValidators.RemoveAt(0)
 
-            lifetime.MainWindow = mainWindow;
-        }
-    }
-}
+        match this.ApplicationLifetime with
+        | :? IClassicDesktopStyleApplicationLifetime as lifetime ->
+            let field = GameField(20, 15)
+            let game = Game(field)
+            game.Start()
+            lifetime.MainWindow <- MainWindow(DataContext = field)
+        | _ -> ()
+
+        base.OnFrameworkInitializationCompleted()
