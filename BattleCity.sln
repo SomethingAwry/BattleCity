@@ -1,9 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BattleCity", "BattleCity.fsproj", "{8A93446B-953D-4B24-A2B4-A2410E1043B8}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "BattleCity", "BattleCity.fsproj", "{8A93446B-953D-4B24-A2B4-A2410E1043B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ref", "ref\ref.csproj", "{109CDA9F-30BA-4BEC-90EA-113F89523067}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +16,10 @@ Global
 		{8A93446B-953D-4B24-A2B4-A2410E1043B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A93446B-953D-4B24-A2B4-A2410E1043B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A93446B-953D-4B24-A2B4-A2410E1043B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{109CDA9F-30BA-4BEC-90EA-113F89523067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{109CDA9F-30BA-4BEC-90EA-113F89523067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{109CDA9F-30BA-4BEC-90EA-113F89523067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{109CDA9F-30BA-4BEC-90EA-113F89523067}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

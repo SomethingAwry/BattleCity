@@ -20,18 +20,12 @@ type App() =
         BindingPlugins.DataValidators.RemoveAt(0)
 
         match this.ApplicationLifetime with
-        | :? IClassicDesktopStyleApplicationLifetime as desktop ->
-             desktop.MainWindow <- MainWindow(DataContext = MainWindowViewModel())
+        | :? IClassicDesktopStyleApplicationLifetime as lifetime ->
+            //let field = GameField()
+            //let game = Game(field)
+            //game.Start()
+            //lifetime.MainWindow <- MainWindow(DataContext = field)
+            lifetime.MainWindow <- MainWindow()
         | _ -> ()
-
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
-            var mainWindow = new MainWindow();
-
-            var field = new GameField();
-            var game = new Game(field);
-            game.Start();
-            mainWindow.DataContext = field;
-
-            lifetime.MainWindow = mainWindow;
 
         base.OnFrameworkInitializationCompleted()

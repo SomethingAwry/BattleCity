@@ -13,19 +13,16 @@ type MainWindow () as this =
 
     // As F# does not have partial classes, InitializeComponent is
     // not defined elsewhere to do the below; we do it here ourselves.
-    member private this.InitializeComponent() =
+    member private me.InitializeComponent() =
 #if DEBUG
-        this.AttachDevTools()
+        me.AttachDevTools()
 #endif
-        AvaloniaXamlLoader.Load(this)
+        AvaloniaXamlLoader.Load(me)
 
-    protected override void OnKeyDown(KeyEventArgs e) {
-        Keyboard.Keys.Add(e.Key);
-        base.OnKeyDown(e);
-    }
+    override _.OnKeyDown (e: KeyEventArgs) =
+        Keyboard.Keys.Add(e.Key) |> ignore
+        base.OnKeyDown(e)
 
-    protected override void OnKeyUp(KeyEventArgs e) {
-        Keyboard.Keys.Remove(e.Key);
-        base.OnKeyUp(e);
-    }
-}
+    override _.OnKeyUp (e: KeyEventArgs) =
+        Keyboard.Keys.Remove(e.Key) |> ignore
+        base.OnKeyUp(e)
