@@ -1,16 +1,23 @@
-namespace BattleCity;
+namespace BattleCity
 
-using Avalonia.Controls;
-using Avalonia.Input;
+open Avalonia
+open Avalonia.Controls
+open Avalonia.Input
+open Avalonia.Markup.Xaml
 
-/// <summary>
-///     Interaction logic for MainWindow.xaml
-/// </summary>
-public partial class MainWindow : Window {
+/// Interaction logic for MainWindow.xaml
+type MainWindow () as this = 
+    inherit Window ()
 
-    public MainWindow() {
-        InitializeComponent();
-    }
+    do this.InitializeComponent()
+
+    // As F# does not have partial classes, InitializeComponent is
+    // not defined elsewhere to do the below; we do it here ourselves.
+    member private this.InitializeComponent() =
+#if DEBUG
+        this.AttachDevTools()
+#endif
+        AvaloniaXamlLoader.Load(this)
 
     protected override void OnKeyDown(KeyEventArgs e) {
         Keyboard.Keys.Add(e.Key);
