@@ -1,0 +1,67 @@
+# specifying eol also specifies the file as text
+# git files
+.gitattributes eol=lf
+.gitignore eol=lf
+.gitmodules eol=lf
+.git-blame-ignore-revs eol=lf
+
+# *nix files, or cross-platform files that Windows tools should be able to handle as lf okay. 
+*.conf eol=lf
+*.fs eol=lf 
+*.fsproj eol=lf
+*.fsx eol=lf
+*.java eol=lf
+*.js eol=lf
+*.jsp eol=lf
+*.kt eol=lf
+*.kts eol=lf
+*.pl eol=lf
+*.properties eol=lf
+*.sh eol=lf
+*.wpcs eol=lf
+*.wql eol=lf
+*.xsl eol=lf
+*.yml eol=lf
+
+# cross-platform files that Windows tools prefer as crlf
+*.sln eol=crlf
+
+# per-platform eol
+.editorconfig text
+*.css text
+*.csv text
+*.dtd text
+*.html text
+*.gv text
+*.json text
+*.lst text
+*.md text
+*.props text
+*.pubxml text
+*.puml text
+*.runsettings text
+*.sav text
+*.sql text
+*.svg text
+*.txt text
+*.wpcs text
+*.xml text
+*.xsd text
+*.xslt text
+
+# Windows files
+*.bat eol=crlf
+*.cmd eol=crlf
+
+# binary files
+*.dll binary
+*.exe binary
+*.jar binary
+*.nupkg binary
+*.pdb binary
+*.pdf binary
+*.png binary
+*.war binary
+*.xls binary
+*.xlsx binary
+*.zip binary
