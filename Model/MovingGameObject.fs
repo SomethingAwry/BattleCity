@@ -1,136 +1,118 @@
-namespace BattleCity.Model;
+namespace BattleCity.Model
 
-using System;
-using System.Linq;
+open System
+open System.Linq
 
-public abstract class MovingGameObject : GameObject {
-    private readonly GameField _field;
-    private CellLocation _cellLocation;
-    private Facing _facing;
-    private CellLocation _targetCellLocation;
+[<AbstractClass>]
+type MovingGameObject internal (field: GameField, location: CellLocation, facing: Facing) =
+    inherit GameObject(location.ToPoint())
 
-    protected MovingGameObject(GameField field, CellLocation location, Facing facing) : base(location.ToPoint()) {
-        _field = field;
-        Facing = facing;
-        CellLocation = TargetCellLocation = location;
-    }
+    let mutable _cellLocation = location
+    let mutable _targetCellLocation = location
+    let mutable _facing = facing
 
-    public override int Layer => 1;
+    let getDirection current target =
+        if target.X < current.X then Facing.West
+        elif target.X > current.X then Facing.East
+        elif target.Y < current.Y then Facing.North
+        else Facing.South
 
-    public Facing Facing {
-        get => _facing;
-        set {
-            if (value == _facing) return;
-            _facing = value;
-            OnPropertyChanged();
-        }
-    }
+    override _.Layer = 1
 
-    public CellLocation CellLocation {
-        get => _cellLocation;
-        private set {
-            if (value.Equals(_cellLocation)) return;
-            _cellLocation = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(IsMoving));
-        }
-    }
+    member me.Facing
+        with get() = _facing
+        and set (v) =
+            if v <> _facing then
+                _facing <- v
+                me.OnPropertyChanged(nameof me.Facing)
 
-    public CellLocation TargetCellLocation {
-        get => _targetCellLocation;
-        private set {
-            if (value.Equals(_targetCellLocation)) return;
-            _targetCellLocation = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(IsMoving));
-        }
-    }
+    member me.CellLocation
+        with get() = _cellLocation
+        and set (v) =
+            if v <> _cellLocation then
+                _cellLocation <- v
+                me.OnPropertyChanged(nameof me.CellLocation)
+                me.OnPropertyChanged(nameof me.IsMoving)
 
-    public bool IsMoving => TargetCellLocation != CellLocation;
+    member me.TargetCellLocation
+        with get() = _targetCellLocation
+        and set (v) =
+            if v <> _targetCellLocation then
+                _targetCellLocation <- v
+                me.OnPropertyChanged(nameof me.TargetCellLocation)
+                me.OnPropertyChanged(nameof me.IsMoving)
 
-    protected virtual double SpeedFactor => (double)1 / 15;
+    member _.IsMoving = _targetCellLocation <> _cellLocation
 
-    public bool SetTarget(CellLocation loc) {
-        if (IsMoving)
+    abstract SpeedFactor: float
+    default _.SpeedFactor = 1.0 / 15.0
+
+    member me.SetTarget (loc: CellLocation) : bool =
+        if me.IsMoving then
             //We are the bear rolling from the hill
-            throw new InvalidOperationException("Unable to change direction while moving");
-        if (loc == CellLocation)
-            return true;
-        Facing = GetDirection(CellLocation, loc);
-        if (loc.X < 0 || loc.Y < 0)
-            return false;
-        if (loc.X >= _field.Width || loc.Y >= _field.Height)
-            return false;
-        if (!_field.Tiles[loc.X, loc.Y].IsPassable)
-            return false;
+            raise <| InvalidOperationException("Unable to change direction while moving")
+        elif loc = _cellLocation then
+            true
+        else
+            me.Facing <- getDirection _cellLocation loc
+            if loc.X < 0 || loc.Y < 0 then false
+            elif loc.X >= field.Width || loc.Y >= field.Height then false
+            elif not <| field.Tiles[loc.X, loc.Y].IsPassable then false
+            else
+                let otherwiseOccupied =
+                    field.GameObjects.OfType<MovingGameObject>()
+                    |> Seq.exists (fun t ->
+                        t <> me && (t.CellLocation = loc || t.TargetCellLocation = loc)
+                    )
+                if otherwiseOccupied then false
+                else
+                    me.TargetCellLocation <- loc
+                    true
 
-        if (
-            _field.GameObjects.OfType<MovingGameObject>()
-            .Any(t => t != this && (t.CellLocation == loc || t.TargetCellLocation == loc)))
-            return false;
+    member _.GetTileAtDirection (facing: Facing) : CellLocation =
+        match facing with
+        | Facing.North -> { _cellLocation with Y = _cellLocation.Y - 1 }
+        | Facing.South -> { _cellLocation with Y = _cellLocation.Y + 1 }
+        | Facing.West -> { _cellLocation with X = _cellLocation.X - 1 }
+        | _ -> { _cellLocation with X = _cellLocation.X + 1 }
 
-        TargetCellLocation = loc;
-        return true;
-    }
+    member me.SetTarget (?facing: Facing) : bool =
+        let target =
+            match facing with
+            | Some face -> me.GetTileAtDirection(face)
+            | None -> _cellLocation
+        me.SetTarget target
 
-    public CellLocation GetTileAtDirection(Facing facing) {
-        if (facing == Facing.North)
-            return CellLocation with { Y = CellLocation.Y - 1 };
-        if (facing == Facing.South)
-            return CellLocation with { Y = CellLocation.Y + 1 };
-        if (facing == Facing.West)
-            return CellLocation with { X = CellLocation.X - 1 };
-        return CellLocation with { X = CellLocation.X + 1 };
-    }
+    member me.SetLocation (loc: CellLocation) : unit =
+        me.CellLocation <- loc
+        me.Location <- loc.ToPoint()
 
-    public bool SetTarget(Facing? facing) {
-        return SetTarget(facing.HasValue ? GetTileAtDirection(facing.Value) : CellLocation);
-    }
-
-    private Facing GetDirection(CellLocation current, CellLocation target) {
-        if (target.X < current.X)
-            return Facing.West;
-        if (target.X > current.X)
-            return Facing.East;
-        if (target.Y < current.Y)
-            return Facing.North;
-        return Facing.South;
-    }
-
-    public void SetLocation(CellLocation loc) {
-        CellLocation = loc;
-        Location = loc.ToPoint();
-    }
-
-    public void MoveToTarget() {
-        if (TargetCellLocation == CellLocation)
-            return;
-        var speed = GameField.CellSize *
-                    (_field.Tiles[CellLocation.X, CellLocation.Y].Speed +
-                     _field.Tiles[TargetCellLocation.X, TargetCellLocation.Y].Speed) / 2
-                    * SpeedFactor;
-        var pos = Location;
-        var direction = GetDirection(CellLocation, TargetCellLocation);
-        if (direction == Facing.North) {
-            pos = pos.WithY(pos.Y - speed);
-            Location = pos;
-            if (pos.Y / GameField.CellSize <= TargetCellLocation.Y)
-                SetLocation(TargetCellLocation);
-        } else if (direction == Facing.South) {
-            pos = pos.WithY(pos.Y + speed);
-            Location = pos;
-            if (pos.Y / GameField.CellSize >= TargetCellLocation.Y)
-                SetLocation(TargetCellLocation);
-        } else if (direction == Facing.West) {
-            pos = pos.WithX(pos.X - speed);
-            Location = pos;
-            if (pos.X / GameField.CellSize <= TargetCellLocation.X)
-                SetLocation(TargetCellLocation);
-        } else if (direction == Facing.East) {
-            pos = pos.WithX(pos.X + speed);
-            Location = pos;
-            if (pos.X / GameField.CellSize >= TargetCellLocation.X)
-                SetLocation(TargetCellLocation);
-        }
-    }
-}
+    member my.MoveToTarget () : unit =
+        if _targetCellLocation <> _cellLocation then
+            let speed =
+                GameField.CellSize * (
+                    field.Tiles[CellLocation.X, CellLocation.Y].Speed 
+                    + field.Tiles[TargetCellLocation.X, TargetCellLocation.Y].Speed
+                    ) / 2.0 * my.SpeedFactor
+            let mutable pos = my.Location
+            match getDirection _cellLocation _targetCellLocation with
+            | Facing.North ->
+                pos <- pos.WithY(pos.Y - speed)
+                my.Location <- pos
+                if pos.Y / GameField.CellSize <= _targetCellLocation.Y then
+                    SetLocation(_targetCellLocation)
+            | Facing.South ->
+                pos <- pos.WithY(pos.Y + speed)
+                my.Location <- pos
+                if pos.Y / GameField.CellSize >= _targetCellLocation.Y then
+                    SetLocation(_targetCellLocation)
+            | Facing.West ->
+                pos <- pos.WithX(pos.X - speed)
+                my.Location <- pos
+                if pos.X / GameField.CellSize <= _targetCellLocation.X then
+                    SetLocation(_targetCellLocation)
+            | Facing.East ->
+                pos <- pos.WithX(pos.X + speed)
+                my.Location <- pos
+                if pos.X / GameField.CellSize >= _targetCellLocation.X then
+                    SetLocation(_targetCellLocation)

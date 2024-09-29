@@ -1,9 +1,11 @@
-namespace BattleCity.Model;
+namespace BattleCity.Model
 
-using Avalonia;
+open Avalonia
 
-public readonly record struct CellLocation(int X, int Y) {
-    public Point ToPoint() {
-        return new(GameField.CellSize * X, GameField.CellSize * Y);
-    }
+type CellLocation = {
+    X: int
+    Y: int
 }
+with
+    member me.ToPoint() =
+        Point(GameField.CellSize * me.X, GameField.CellSize * me.Y)

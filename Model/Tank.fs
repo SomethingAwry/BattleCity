@@ -1,7 +1,6 @@
-﻿namespace BattleCity.Model;
+﻿namespace BattleCity.Model
 
-public class Tank(GameField field, CellLocation location, Facing facing, double speed) : MovingGameObject(field, location, facing) {
-    private readonly double _speed = speed;
+type Tank (field: GameField, location: CellLocation, facing: Facing, speed: float) =
+    inherit MovingGameObject(field, location, facing)
 
-    protected override double SpeedFactor => _speed * base.SpeedFactor;
-}
+    override _.SpeedFactor = speed * base.SpeedFactor

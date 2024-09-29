@@ -1,6 +1,6 @@
-﻿namespace BattleCity.Model;
+﻿namespace BattleCity.Model
 
-using Avalonia;
+open Avalonia
 
-public class Apple(Point location) : GameObject(location) {
-}
+type Apple(location: Point) =
+    inherit GameObject(location)
