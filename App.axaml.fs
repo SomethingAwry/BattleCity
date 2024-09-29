@@ -2,7 +2,6 @@ namespace BattleCity
 
 open Avalonia
 open Avalonia.Controls.ApplicationLifetimes
-open Avalonia.Data.Core
 open Avalonia.Data.Core.Plugins
 open Avalonia.Markup.Xaml
 open BattleCity.Model
@@ -21,11 +20,10 @@ type App() =
 
         match this.ApplicationLifetime with
         | :? IClassicDesktopStyleApplicationLifetime as lifetime ->
-            //let field = GameField()
-            //let game = Game(field)
-            //game.Start()
-            //lifetime.MainWindow <- MainWindow(DataContext = field)
-            lifetime.MainWindow <- MainWindow()
+            let field = GameField()
+            let game = Game(field)
+            game.Start()
+            lifetime.MainWindow <- MainWindow(DataContext = field)
         | _ -> ()
 
         base.OnFrameworkInitializationCompleted()

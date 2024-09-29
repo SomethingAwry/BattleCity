@@ -1,7 +1,6 @@
 ﻿namespace BattleCity.Infrastructure
 
 open System.ComponentModel
-open System.Runtime.CompilerServices
 
 [<AbstractClass>]
 type PropertyChangedBase() =

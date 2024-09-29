@@ -3,12 +3,12 @@ namespace BattleCity.Model
 open Avalonia
 
 type TerrainTileType =
-    | Plain //passable, shoot-thru
-    | WoodWall //impassable, takes 1 shot to bring down
-    | StoneWall //impassable, indestructible
-    | Water //impassable, shoot-thru
-    | Pavement //passable, 2x speed
-    | Forest //passable at half speed, shoot-thru
+    | Plain = 0 //passable, shoot-thru
+    | WoodWall = 1 //impassable, takes 1 shot to bring down
+    | StoneWall = 2 //impassable, indestructible
+    | Water = 3 //impassable, shoot-thru
+    | Pavement = 4 //passable, 2x speed
+    | Forest = 5 //passable at half speed, shoot-thru
 
 type TerrainTile(location: Point, typ: TerrainTileType) =
     inherit GameObject(location)
@@ -31,7 +31,7 @@ type TerrainTile(location: Point, typ: TerrainTileType) =
         TerrainTileType.Forest, true
     ]
 
-    member _.Speed = speeds[typ]
-    member _.ShootThru = shootThrus[typ]
-    member my.IsPassable = my.Speed > 0.1
+    member _.Speed: float = speeds[typ]
+    member _.ShootThru: bool = shootThrus[typ]
+    member my.IsPassable: bool = my.Speed > 0.1
     member _.Type = typ
