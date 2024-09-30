@@ -24,13 +24,9 @@ public abstract class GameBase
 
     protected abstract void Tick();
 
-    public void Start()
-    {
+    public void Start() =>
         _timer.IsEnabled = true;
-    }
 
-    public void Stop()
-    {
+    public void Stop() =>
         _timer.IsEnabled = false;
-    }
 }
