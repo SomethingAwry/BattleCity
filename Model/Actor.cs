@@ -1,9 +1,10 @@
 ﻿using BattleCity.Infrastructure;
 using Avalonia;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BattleCity.Model;
 
-public abstract class GameObject : PropertyChangedBase
+public abstract class GameObject : ObservableObject
 {
     private Point _location;
 
@@ -15,12 +16,7 @@ public abstract class GameObject : PropertyChangedBase
     public Point Location
     {
         get => _location;
-        protected set
-        {
-            if (value.Equals(_location)) return;
-            _location = value;
-            OnPropertyChanged();
-        }
+        protected set => SetProperty(ref _location, value);
     }
 
     public virtual int Layer => 0;

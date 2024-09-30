@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Avalonia;
-using BattleCity.Infrastructure;
 
 namespace BattleCity.Model;
 
-public class GameField : PropertyChangedBase
+public class GameField
 {
     public const double CellSize = 32;
 

@@ -22,12 +22,7 @@ public abstract class MovingGameObject : GameObject
     public Facing Facing
     {
         get => _facing;
-        set
-        {
-            if (value == _facing) return;
-            _facing = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(ref _facing, value);
     }
 
     public CellLocation CellLocation
@@ -35,9 +30,7 @@ public abstract class MovingGameObject : GameObject
         get => _cellLocation;
         private set
         {
-            if (value.Equals(_cellLocation)) return;
-            _cellLocation = value;
-            OnPropertyChanged();
+            SetProperty(ref _cellLocation, value);
             OnPropertyChanged(nameof(IsMoving));
         }
     }
@@ -47,9 +40,7 @@ public abstract class MovingGameObject : GameObject
         get => _targetCellLocation;
         private set
         {
-            if (value.Equals(_targetCellLocation)) return;
-            _targetCellLocation = value;
-            OnPropertyChanged();
+            SetProperty(ref _targetCellLocation, value);
             OnPropertyChanged(nameof(IsMoving));
         }
     }
