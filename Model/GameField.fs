@@ -12,7 +12,7 @@ type CellLocation = { X: int; Y: int } with
 
 
 [<AbstractClass>]
-type MovingGameObject internal ((field: GameField): GameField, location: CellLocation, facing: Facing) =
+type MovingGameObject internal (field: GameField, location: CellLocation, facing: Facing) =
     inherit GameObject(location.ToPoint())
 
     let mutable _cellLocation = location
