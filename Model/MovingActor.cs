@@ -85,7 +85,7 @@ public abstract class MovingGameObject : GameObject
     public CellLocation GetTileAtDirection(Facing facing)
     {
         if (facing == Facing.North)
-            return CellLocation with { Y =  CellLocation.Y - 1 };
+            return CellLocation with { Y = CellLocation.Y - 1 };
         if (facing == Facing.South)
             return CellLocation with { Y = CellLocation.Y + 1 };
         if (facing == Facing.West)
