@@ -36,7 +36,7 @@ public class GameField : PropertyChangedBase {
 
     public static GameField DesignInstance { get; } = new();
 
-    public ObservableCollection<GameObject> GameObjects { get; } = [];
+    public ObservableCollection<GameObject> GameObjects { get; } = new();
 
     public TerrainTile[,] Tiles { get; }
 

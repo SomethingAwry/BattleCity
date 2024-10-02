@@ -350,3 +350,6 @@ MigrationBackup/
 
 # Mac HFS+/APFS data store (attributes?)
 \.DS_Store
+
+# JetBrains
+\.idea/
