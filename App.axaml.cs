@@ -3,7 +3,7 @@ namespace BattleCity;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using BattleCity.Model;
+using Model;
 
 public class App : Application {
 

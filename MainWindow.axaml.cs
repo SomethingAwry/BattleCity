@@ -3,9 +3,7 @@ namespace BattleCity;
 using Avalonia.Controls;
 using Avalonia.Input;
 
-/// <summary>
-///     Interaction logic for MainWindow.xaml
-/// </summary>
+/// Interaction logic for MainWindow.xaml
 public partial class MainWindow : Window {
 
     public MainWindow() {
