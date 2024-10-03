@@ -3,38 +3,32 @@
         <OutputType>WinExe</OutputType>
     </PropertyGroup>
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**" />
-    </ItemGroup>
-    <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.1.3" />
         <PackageReference Include="Avalonia.Desktop" Version="11.1.3" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.3" />
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.3" />
-    </ItemGroup>
-    <ItemGroup>
-      <AvaloniaXaml Include="App.axaml" />
-      <AvaloniaXaml Include="MainWindow.axaml" />
-    </ItemGroup>
-    <ItemGroup>
-      <Compile Include="App.axaml.cs" />
-      <Compile Include="Infrastructure\CellToScreenConverter.cs" />
-      <Compile Include="Infrastructure\DirectionToMatrixConverter.cs" />
-      <Compile Include="Infrastructure\PropertyChangedBase.cs" />
-      <Compile Include="Infrastructure\TerrainTileConverter.cs" />
-      <Compile Include="Infrastructure\ZIndexConverter.cs" />
-      <Compile Include="Keyboard.cs" />
-      <Compile Include="MainWindow.axaml.cs" />
-      <Compile Include="Model\Actor.cs" />
-      <Compile Include="Model\Apple.cs" />
-      <Compile Include="Model\CellLocation.cs" />
-      <Compile Include="Model\Facing.cs" />
-      <Compile Include="Model\Game.cs" />
-      <Compile Include="Model\GameBase.cs" />
-      <Compile Include="Model\GameField.cs" />
-      <Compile Include="Model\MovingActor.cs" />
-      <Compile Include="Model\Player.cs" />
-      <Compile Include="Model\Tank.cs" />
-      <Compile Include="Model\TerrainTile.cs" />
-      <Compile Include="Program.cs" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+        <AvaloniaResource Include="Assets\**" />
+        <Compile Include="Infrastructure\CellToScreenConverter.cs" />
+        <Compile Include="Infrastructure\DirectionToMatrixConverter.cs" />
+        <Compile Include="Infrastructure\TerrainTileConverter.cs" />
+        <Compile Include="Infrastructure\ZIndexConverter.cs" />
+        <Compile Include="Model\Actor.cs" />
+        <Compile Include="Model\Apple.cs" />
+        <Compile Include="Model\CellLocation.cs" />
+        <Compile Include="Model\Facing.cs" />
+        <Compile Include="Model\Game.cs" />
+        <Compile Include="Model\GameBase.cs" />
+        <Compile Include="Model\GameField.cs" />
+        <Compile Include="Model\MovingActor.cs" />
+        <Compile Include="Model\Player.cs" />
+        <Compile Include="Model\Tank.cs" />
+        <Compile Include="Model\TerrainTile.cs" />
+        <Compile Include="Keyboard.cs" />
+        <AvaloniaXaml Include="App.axaml" />
+        <Compile Include="App.axaml.cs" />
+        <AvaloniaXaml Include="MainWindow.axaml" />
+        <Compile Include="MainWindow.axaml.cs" />
+        <Compile Include="Program.cs" />
     </ItemGroup>
 </Project>
