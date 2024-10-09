@@ -20,7 +20,7 @@ type App() =
 
         match this.ApplicationLifetime with
         | :? IClassicDesktopStyleApplicationLifetime as lifetime ->
-            let field = GameField()
+            let field = GameField(20, 15)
             let game = Game(field)
             game.Start()
             lifetime.MainWindow <- MainWindow(DataContext = field)

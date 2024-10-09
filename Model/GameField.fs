@@ -162,12 +162,11 @@ type GameField (width: int, height: int) as this =
             |> gameObjects.Add
         )
 
-    new() = GameField(20, 15)
     static member CellSize : float = cellSize
     member _.Width = width
     member _.Height = height
 
-    static member private designOnly = lazy GameField()
+    static member private designOnly = lazy GameField(20, 15)
     static member DesignInstance = GameField.designOnly.Value
     member _.GameObjects: ObservableCollection<GameObject> = gameObjects
     member _.Tiles with get(x, y) : TerrainTile = tiles[x, y]
