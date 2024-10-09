@@ -14,7 +14,7 @@
         <Compile Include="Infrastructure/PropertyChangedBase.fs" />
         <Compile Include="Keyboard.fs" />
         <Compile Include="Model/GameBase.fs" />
-        <Compile Include="Model/GameObject.fs" />
+        <Compile Include="Model/Actor.fs" />
         <Compile Include="Model/TerrainTile.fs" />
         <Compile Include="Model/Facing.fs" />
         <Compile Include="Model/Apple.fs" />
