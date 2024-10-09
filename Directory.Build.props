@@ -3,12 +3,9 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <RollForward>Major</RollForward>
     <EnableDefaultItems>false</EnableDefaultItems>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <PreserveCompilationContext>false</PreserveCompilationContext>
   </PropertyGroup>
 
 </Project>
