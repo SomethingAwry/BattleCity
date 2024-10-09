@@ -24,15 +24,9 @@
         <Compile Include="Infrastructure/DirectionToMatrixConverter.fs" />
         <Compile Include="Infrastructure/TerrainTileConverter.fs" />
         <Compile Include="Infrastructure/ZIndexConverter.fs" />
-        <AvaloniaResource Include="MainWindow.axaml" />
-        <!--
         <AvaloniaXaml Include="MainWindow.axaml" />
-        -->
         <Compile Include="MainWindow.axaml.fs" />
-        <AvaloniaResource Include="App.axaml" />
-        <!--
         <AvaloniaXaml Include="App.axaml" />
-        -->
         <Compile Include="App.axaml.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
