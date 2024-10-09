@@ -4,12 +4,8 @@
         xmlns:infrastructure="using:BattleCity.Infrastructure"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="BattleCity" Width="640" Height="480"
+        Design.DataContext="{x:Static model:GameField.DesignInstance}"
         x:DataType="model:GameField">
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.fs) -->
-        {x:Static model:GameField.DesignInstance}
-    </Design.DataContext>
   <Window.Styles>
     <Style Selector="ItemsControl > ContentPresenter" x:DataType="model:GameObject">
       <Setter Property="Canvas.Left" Value="{Binding Location.X}" />

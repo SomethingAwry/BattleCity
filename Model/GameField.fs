@@ -167,7 +167,8 @@ type GameField (width: int, height: int) as this =
     member _.Width = width
     member _.Height = height
 
-    static member DesignInstance: GameField = GameField()
+    static member private designOnly = lazy GameField()
+    static member DesignInstance = GameField.designOnly.Value
     member _.GameObjects: ObservableCollection<GameObject> = gameObjects
     member _.Tiles with get(x, y) : TerrainTile = tiles[x, y]
     member _.Player = player
