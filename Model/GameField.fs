@@ -1,6 +1,7 @@
 ﻿namespace rec BattleCity.Model
 
 open Avalonia
+open BattleCity.Infrastructure
 open System
 open System.Collections.ObjectModel
 open System.Linq
@@ -41,29 +42,24 @@ type MovingGameObject internal (field: GameField, location: CellLocation, facing
     member me.Facing
         with get() = _facing
         and set (v) =
-            // if v <> _facing then
-            //     _facing <- v
-            //     me.OnPropertyChanged(nameof me.Facing)
-            me.SetProperty(ref _facing, v) |> ignore
+            if v <> _facing then
+                _facing <- v
+                me.OnPropertyChanged(nameof me.Facing)
 
     member me.CellLocation
         with get() = _cellLocation
         and set (v) =
-            // if v <> _cellLocation then
-            //     _cellLocation <- v
-            //     me.OnPropertyChanged(nameof me.CellLocation)
-            //     me.OnPropertyChanged(nameof me.IsMoving)
-            if me.SetProperty(ref _cellLocation, v) then
+            if v <> _cellLocation then
+                _cellLocation <- v
+                me.OnPropertyChanged(nameof me.CellLocation)
                 me.OnPropertyChanged(nameof me.IsMoving)
 
     member me.TargetCellLocation
         with get() = _targetCellLocation
         and set (v) =
-            // if v <> _targetCellLocation then
-            //     _targetCellLocation <- v
-            //     me.OnPropertyChanged(nameof me.TargetCellLocation)
-            //     me.OnPropertyChanged(nameof me.IsMoving)
-            if me.SetProperty(ref _targetCellLocation, v) then
+            if v <> _targetCellLocation then
+                _targetCellLocation <- v
+                me.OnPropertyChanged(nameof me.TargetCellLocation)
                 me.OnPropertyChanged(nameof me.IsMoving)
 
     member _.IsMoving = _targetCellLocation <> _cellLocation
@@ -134,6 +130,7 @@ type Player(field: GameField, location: CellLocation, facing: Facing) =
 
 
 type GameField (width: int, height: int) as this =
+    inherit PropertyChangedBase()
 
     static let cellSize = 32.0
     let random = Random()
