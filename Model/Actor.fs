@@ -1,12 +1,11 @@
 ﻿namespace BattleCity.Model
 
 open Avalonia
-//open BattleCity.Infrastructure
-open CommunityToolkit.Mvvm.ComponentModel
+open BattleCity.Infrastructure
 
 [<AbstractClass>]
 type GameObject internal (location: Point) =
-    inherit ObservableObject()
+    inherit PropertyChangedBase()
     let mutable _location = location
 
     member my.Location
@@ -14,7 +13,7 @@ type GameObject internal (location: Point) =
         and internal set (v) = 
             if v <> _location then
                 _location <- v
-                my.OnPropertyChanged(nameof my.Location)
+                my.OnPropertyChanged <@ my.Location @>
 
     abstract Layer: int with get
     default _.Layer = 0
