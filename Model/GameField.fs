@@ -1,7 +1,6 @@
 ﻿namespace rec BattleCity.Model
 
 open Avalonia
-open BattleCity.Infrastructure
 open System
 open System.Collections.ObjectModel
 open System.Linq
@@ -130,8 +129,6 @@ type Player(field: GameField, location: CellLocation, facing: Facing) =
 
 
 type GameField (width: int, height: int) as this =
-    inherit PropertyChangedBase()
-
     static let cellSize = 32.0
     let random = Random()
 
