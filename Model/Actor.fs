@@ -1,11 +1,12 @@
 ﻿namespace BattleCity.Model
 
 open Avalonia
-open BattleCity.Infrastructure
+//open BattleCity.Infrastructure
+open CommunityToolkit.Mvvm.ComponentModel
 
 [<AbstractClass>]
 type GameObject internal (location: Point) =
-    inherit PropertyChangedBase()
+    inherit ObservableObject()
     let mutable _location = location
 
     member my.Location
