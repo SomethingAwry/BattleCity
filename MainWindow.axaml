@@ -65,9 +65,44 @@
                  RenderTransform="{Binding Facing, Converter={x:Static infrastructure:DirectionToMatrixConverter.Instance}}" />
         </Border>
       </DataTemplate>
+
+      <!--
       <DataTemplate DataType="{x:Type model:Tank}">
         <Image Width="32" Height="32" Source="/Assets/Tank.png"
                RenderTransform="{Binding Facing, Converter={x:Static infrastructure:DirectionToMatrixConverter.Instance}}" />
+      </DataTemplate>
+      -->
+      
+      <DataTemplate DataType="{x:Type model:Tank}">
+        <Path 
+          Stroke="SaddleBrown" Fill="DarkOliveGreen" StrokeThickness="1" 
+          Data=
+"
+M -4 -4
+L -4  4
+  -2  4
+  -2 -4
+Z
+M  2 -4
+L  4 -4
+   4  4
+   2  4
+Z
+M  2  2
+L  2 -2
+  -2 -2
+  -2  2
+Z
+M -1 -2
+L -1 -7
+   1 -7
+   1 -2
+Z
+"
+          Width="32" Height="32" 
+           Stretch="UniformToFill"
+          RenderTransform="{Binding Facing, Converter={x:Static infrastructure:DirectionToMatrixConverter.Instance}}"
+          />
       </DataTemplate>
     </ItemsControl.DataTemplates>
   </ItemsControl>
