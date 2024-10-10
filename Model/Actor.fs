@@ -1,7 +1,7 @@
 ﻿namespace BattleCity.Model
 
 open Avalonia
-open CommunityToolkit.Mvvm.ComponentModel
+open BattleCity.Infrastructure
 
 [<AbstractClass>]
 type GameObject internal (location: Point) =

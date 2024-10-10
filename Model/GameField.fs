@@ -47,13 +47,13 @@ type MovingGameObject internal (field: GameField, location: CellLocation, facing
         with get() = _cellLocation
         and set (v) =
             if me.SetProperty(& _cellLocation, v) then
-                me.OnPropertyChanged(nameof me.IsMoving)
+                me.OnPropertyChanged <@ me.IsMoving @>
 
     member me.TargetCellLocation
         with get() = _targetCellLocation
         and set (v) =
             if me.SetProperty(& _targetCellLocation, v) then
-                me.OnPropertyChanged(nameof me.IsMoving)
+                me.OnPropertyChanged <@ me.IsMoving @>
 
     member _.IsMoving = _targetCellLocation <> _cellLocation
 
