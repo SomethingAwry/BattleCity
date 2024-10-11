@@ -1,4 +1,4 @@
-﻿namespace BattleCity.Model
+namespace BattleCity.Model
 
 open Avalonia
 open BattleCity.Infrastructure
@@ -10,10 +10,8 @@ type GameObject internal (location: Point) =
 
     member my.Location
         with get() = _location
-        and internal set (v) =
-            if not (v.Equals(_location)) then
-                _location <- v
-                my.OnPropertyChanged <@ my.Location @>
+        and internal set (v) = 
+            my.SetProperty(& _location, v) |> ignore
 
     abstract Layer: int with get
     default _.Layer = 0

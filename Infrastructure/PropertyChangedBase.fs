@@ -1,6 +1,8 @@
 namespace BattleCity.Infrastructure
 
+open System.Collections.Generic
 open System.ComponentModel
+open System.Runtime.CompilerServices
 open Microsoft.FSharp.Quotations.Patterns
 
 /// A base class for objects of which the properties must be observable.
@@ -21,3 +23,15 @@ type PropertyChangedBase () =
         | PropertyGet(_,pi,_) -> me.OnPropertyChanged(PropertyChangedEventArgs(pi.Name))
         | _ -> invalidArg (nameof quotation) "Expecting a Property expression"       
     
+        
+    member me.SetProperty<'T> (field: byref<'T>, newValue: 'T, [<CallerMemberName>] ?propertyName: string) : bool =
+        match EqualityComparer<'T>.Default.Equals(field, newValue), propertyName with
+        | true, _ -> false
+        | false, None -> invalidArg (nameof propertyName) "No Property specified"
+#if DEBUG
+        | false, Some badName when me.GetType().GetProperty(badName) = null -> invalidArg (nameof propertyName) $"Property {badName} doesn't exist"
+#endif
+        | false, Some name ->
+            field <- newValue
+            me.OnPropertyChanged(PropertyChangedEventArgs(name))
+            true
