@@ -22,16 +22,6 @@ type TerrainTile(location: Point, typ: TerrainTileType) =
         TerrainTileType.Forest, 0.5
     ]
 
-    static let shootThrus = Map.ofList [
-        TerrainTileType.Plain, true
-        TerrainTileType.WoodWall, false
-        TerrainTileType.StoneWall, false
-        TerrainTileType.Water, true
-        TerrainTileType.Pavement, true
-        TerrainTileType.Forest, true
-    ]
-
     member _.Speed: float = speeds[typ]
-    member _.ShootThru: bool = shootThrus[typ]
     member my.IsPassable: bool = my.Speed > 0.1
     member _.Type = typ
