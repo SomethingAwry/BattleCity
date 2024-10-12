@@ -28,7 +28,6 @@
         <Compile Include="Infrastructure/CellToScreenConverter.fs" />
         <Compile Include="Infrastructure/DirectionToMatrixConverter.fs" />
         <Compile Include="Infrastructure/TerrainTileConverter.fs" />
-        <Compile Include="Infrastructure/ZIndexConverter.fs" />
         <AvaloniaXaml Include="MainWindow.axaml" />
         <Compile Include="MainWindow.axaml.fs" />
         <AvaloniaXaml Include="App.axaml" />

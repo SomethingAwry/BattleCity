@@ -11,7 +11,7 @@
     <Style Selector="ItemsControl > ContentPresenter" x:DataType="model:GameObject">
       <Setter Property="Canvas.Left" Value="{Binding Location.X}" />
       <Setter Property="Canvas.Top" Value="{Binding Location.Y}" />
-      <Setter Property="ZIndex" Value="{Binding Converter={x:Static infrastructure:ZIndexConverter.Instance }}" />
+      <Setter Property="ZIndex" Value="{Binding Layer}" />
     </Style>
   </Window.Styles>
   <ItemsControl
