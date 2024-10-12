@@ -12,21 +12,20 @@
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.3" />
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.3" />
         <AvaloniaResource Include="Assets/**" />
+        <None Include="params.ini">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <Compile Include="Infrastructure/PropertyChangedBase.fs" />
         <Compile Include="Keyboard.fs" />
         <Compile Include="Model/GameBase.fs" />
         <Compile Include="Model/Actor.fs" />
-        <Compile Include="Model/TerrainTile.fs" />
         <Compile Include="Model/Facing.fs" />
-        <Compile Include="Model/CellLocation.fs" />
         <Compile Include="Model/MovingActor.fs" />
         <Compile Include="Model/Tank.fs" />
         <Compile Include="Model/Player.fs" />
         <Compile Include="Model/GameField.fs" />
         <Compile Include="Model/Game.fs" />
-        <Compile Include="Infrastructure/CellToScreenConverter.fs" />
         <Compile Include="Infrastructure/DirectionToMatrixConverter.fs" />
-        <Compile Include="Infrastructure/TerrainTileConverter.fs" />
         <AvaloniaXaml Include="MainWindow.axaml" />
         <Compile Include="MainWindow.axaml.fs" />
         <AvaloniaXaml Include="App.axaml" />

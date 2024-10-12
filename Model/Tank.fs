@@ -1,6 +1,7 @@
 ﻿namespace BattleCity.Model
 
-type Tank (field: IGameField, location: CellLocation, facing: Facing, speed: float) =
+open Avalonia
+
+type Tank (field: IGameField, location: Point, facing: Facing, speed: float) =
     inherit MovingGameObject(field, location, facing)
-    override _.SpeedFactor = speed * base.SpeedFactor
     override _.Layer = 1
