@@ -11,13 +11,6 @@ type DirectionToMatrixConverter internal () =
 
     interface IValueConverter with
         member _.Convert (value, _, _, _) : obj =
-            let direction = value :?> Facing
-            let matrix =
-                match direction with
-                | Facing.South -> Matrix.CreateScale(1, -1)
-                | Facing.East -> Matrix.CreateRotation(1.5708)
-                | Facing.West -> Matrix.CreateRotation(1.5708) * Matrix.CreateScale(-1, 1)
-                | _ -> Matrix.Identity
-            MatrixTransform matrix
+            value :?> float |> Matrix.CreateRotation |> MatrixTransform :> obj
         member _.ConvertBack (_, _, _, _) : obj =
             raise <| NotImplementedException()

@@ -32,7 +32,7 @@ type GameField (width: int, height: int) as this =
         |> Seq.filter (fun (x,y) -> tiles[x, y].IsPassable)
         |> Seq.truncate 10
         |> Seq.iter (fun (x,y) ->
-            let tankFacing = Enum.GetValues<Facing>()[random.Next(4)]
+            let tankFacing = Facing.Directions[random.Next(4)]
             Tank(this, { X = x; Y = y }, tankFacing, random.NextDouble() * 4.0 + 1.0)
             |> gameObjects.Add
         )

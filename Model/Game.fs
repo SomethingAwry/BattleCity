@@ -25,7 +25,7 @@ type Game (field: IGameField) =
         |> Seq.iter (fun (tank: Tank) -> 
             if not tank.IsMoving then
                 if not <| tank.SetTarget tank.Facing then
-                    let tankFacing = Enum.GetValues<Facing>()[random.Next(4)]
+                    let tankFacing = Facing.Directions[random.Next(4)]
                     if not <| tank.SetTarget tankFacing then
                         tank.SetTarget () |> ignore
         )
